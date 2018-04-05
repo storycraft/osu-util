@@ -1,0 +1,6 @@
+C:\Users\user\Desktop\Story Workspace\OsuUtil\obj\Debug\OsuUtil.csprojResolveAssemblyReference.cache
+C:\Users\user\Desktop\Story Workspace\OsuUtil\obj\Debug\OsuUtil.csproj.CoreCompileInputs.cache
+C:\Users\user\Desktop\Story Workspace\OsuUtil\bin\Debug\OsuUtil.dll
+C:\Users\user\Desktop\Story Workspace\OsuUtil\bin\Debug\OsuUtil.pdb
+C:\Users\user\Desktop\Story Workspace\OsuUtil\obj\Debug\OsuUtil.dll
+C:\Users\user\Desktop\Story Workspace\OsuUtil\obj\Debug\OsuUtil.pdb
