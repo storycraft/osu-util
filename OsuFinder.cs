@@ -10,6 +10,11 @@ namespace OsuUtil
 {
     public static class OsuFinder
     {
+        public static bool IsOsuInstalled()
+        {
+            return TryFindOsuLocation() != null;
+        }
+
         public static string TryFindOsuLocation()
         {
             RegistryKey registryKey = Registry.ClassesRoot.OpenSubKey("osu\\shell\\open\\command");
