@@ -11,40 +11,33 @@ namespace OsuUtil.DataBase
     {
         public static OsuDb ParseFromStream(FileStream dbStream)
         {
-            try
+            using (OsuBinaryReader reader = new OsuBinaryReader(dbStream))
             {
-                using (OsuBinaryReader reader = new OsuBinaryReader((Stream)dbStream))
+                Dictionary<int, IBeatmapSet> beatmapSets = new Dictionary<int, IBeatmapSet>();
+                int version = reader.ReadInt32();
+                bool old = version < 20140609;
+                int folderCount = reader.ReadInt32();
+                bool AccountLocked = reader.ReadBoolean();
+                DateTime AccountUnlock = reader.ReadDateTime();
+                string PlayerName = reader.ReadString();
+                int num1 = reader.ReadInt32();
+                for (int index = 0; index < num1; ++index)
                 {
-                    Dictionary<int, IBeatmapSet> beatmapSets = new Dictionary<int, IBeatmapSet>();
-                    int version = reader.ReadInt32();
-                    bool old = version < 20140609;
-                    int folderCount = reader.ReadInt32();
-                    bool AccountLocked = reader.ReadBoolean();
-                    DateTime AccountUnlock = reader.ReadDateTime();
-                    string PlayerName = reader.ReadString();
-                    int num1 = reader.ReadInt32();
-                    for (int index = 0; index < num1; ++index)
+                    IBeatmap fromReader = BeatmapParser.ParseFromReader(reader, old);
+                    IBeatmapSet beatmapSet;
+                    if (beatmapSets.ContainsKey(fromReader.SetId))
                     {
-                        IBeatmap fromReader = OsuDbReader.BeatmapParser.ParseFromReader(reader, old);
-                        IBeatmapSet beatmapSet;
-                        if (beatmapSets.ContainsKey(fromReader.SetId))
-                        {
-                            beatmapSet = beatmapSets[fromReader.SetId];
-                        }
-                        else
-                        {
-                            beatmapSet = new OsuBeatmapSet(fromReader.RankedName, fromReader.RankedNameUnicode, fromReader.Artist, fromReader.ArtistUnicode, fromReader.Tags, fromReader.SetId, "binary");
-                            beatmapSets[beatmapSet.RankedID] = beatmapSet;
-                        }
-                        beatmapSet.Beatmaps[fromReader.Id] = fromReader;
+                        beatmapSet = beatmapSets[fromReader.SetId];
                     }
-                    int num2 = reader.ReadByte();
-                    return new OsuDb(version, folderCount, AccountLocked, AccountUnlock, PlayerName, beatmapSets);
+                    else
+                    {
+                        beatmapSet = new OsuBeatmapSet(fromReader.RankedName, fromReader.RankedNameUnicode, fromReader.Artist, fromReader.ArtistUnicode, fromReader.Tags, fromReader.SetId, "binary");
+                        beatmapSets[beatmapSet.RankedID] = beatmapSet;
+                    }
+                    beatmapSet.Beatmaps[fromReader.Id] = fromReader;
                 }
-            }
-            catch (Exception ex)
-            {
-                throw new BeatmapParseException(string.Format("Failed to parse Db {0}", dbStream.Name), ex);
+                int num2 = reader.ReadByte();
+                return new OsuDb(version, folderCount, AccountLocked, AccountUnlock, PlayerName, beatmapSets);
             }
         }
 
@@ -52,92 +45,113 @@ namespace OsuUtil.DataBase
         {
             public static IBeatmap ParseFromReader(OsuBinaryReader reader, bool old)
             {
-                reader.ReadInt32();
-                string str1 = reader.ReadString();
-                string str2 = reader.ReadString();
+                int size = reader.ReadInt32();
+                string artistName = reader.ReadString();
+                string artistNameUnicode = reader.ReadString();
+
                 string rankedName = reader.ReadString();
-                string str3 = reader.ReadString();
-                string str4 = reader.ReadString();
-                string str5 = reader.ReadString();
-                string str6 = reader.ReadString();
-                reader.ReadString();
-                reader.ReadString();
-                int num1 = reader.ReadByte();
-                int num2 = reader.ReadInt16();
-                int num3 = reader.ReadInt16();
-                int num4 = reader.ReadInt16();
-                reader.ReadInt64();
+                string rankedNameUnicode = reader.ReadString();
+
+                string creatorName = reader.ReadString();
+
+                string diffcultyName = reader.ReadString();
+
+                string audioFileName = reader.ReadString();
+
+                string md5Hash = reader.ReadString();
+                string osuFileName = reader.ReadString();
+
+                int rankedStatus = reader.ReadByte();
+
+                int hitcircleCount = reader.ReadInt16();
+                int sliderCount = reader.ReadInt16();
+                int spinnerCount = reader.ReadInt16();
+
+                long lastModification = reader.ReadInt64();
+
+                double approachRate, circieSize, hpDrain, overallDiffculty;
                 if (old)
                 {
-                    int num5 = reader.ReadByte();
-                    int num6 = reader.ReadByte();
-                    int num7 = reader.ReadByte();
-                    int num8 = reader.ReadByte();
+                    approachRate = reader.ReadByte();
+                    circieSize = reader.ReadByte();
+                    hpDrain = reader.ReadByte();
+                    overallDiffculty = reader.ReadByte();
                 }
                 else
                 {
-                    double num5 = reader.ReadSingle();
-                    double num6 = reader.ReadSingle();
-                    double num7 = reader.ReadSingle();
-                    double num8 = reader.ReadSingle();
+                    approachRate = reader.ReadSingle();
+                    circieSize = reader.ReadSingle();
+                    hpDrain = reader.ReadSingle();
+                    overallDiffculty = reader.ReadSingle();
                 }
-                reader.ReadDouble();
 
+                double sliderVelocity = reader.ReadDouble();
+
+                Dictionary<int, double> starRatingOsu, starRatingTaiko, starRatingCTB, starRatingMania;
                 if (!old)
                 {
-                    reader.ReadIntDoublePair();
-                    reader.ReadIntDoublePair();
-                    reader.ReadIntDoublePair();
-                    reader.ReadIntDoublePair();
+                    starRatingOsu = reader.ReadIntDoublePair();
+                    starRatingTaiko = reader.ReadIntDoublePair();
+                    starRatingCTB = reader.ReadIntDoublePair();
+                    starRatingMania = reader.ReadIntDoublePair();
                 }
 
-                reader.ReadInt32();
-                reader.ReadInt32();
-                reader.ReadInt32();
-                reader.ReadTimingPointList();
-                int num9 = reader.ReadInt32();
-                int num10 = reader.ReadInt32();
-                reader.ReadInt32();
-                int num11 = reader.ReadByte();
-                int num12 = reader.ReadByte();
-                int num13 = reader.ReadByte();
-                int num14 = reader.ReadByte();
-                int num15 = reader.ReadInt16();
-                double num16 = reader.ReadSingle();
-                int num17 = reader.ReadByte();
-                reader.ReadString();
-                string str7 = reader.ReadString();
-                int num18 = reader.ReadInt16();
-                reader.ReadString();
-                reader.ReadBoolean();
-                reader.ReadInt64();
-                reader.ReadBoolean();
-                reader.ReadString();
-                reader.ReadInt64();
-                reader.ReadBoolean();
-                reader.ReadBoolean();
-                reader.ReadBoolean();
-                reader.ReadBoolean();
-                reader.ReadBoolean();
+                int drainTime = reader.ReadInt32();
+                int totalTime = reader.ReadInt32();
+                int previewStart = reader.ReadInt32();
+
+                List<TimingPoint> timingPointList = reader.ReadTimingPointList();
+
+                int beatmapId = reader.ReadInt32();
+                int beatmapSetId = reader.ReadInt32();
+                int threadId = reader.ReadInt32();
+
+                int gradeOsu = reader.ReadByte();
+                int gradeTaiko = reader.ReadByte();
+                int gradeCTB = reader.ReadByte();
+                int gradeMania = reader.ReadByte();
+
+                int localOffset = reader.ReadInt16();
+
+                double stackLeniency = reader.ReadSingle();
+
+                byte gameplayMode = reader.ReadByte();
+
+                string songSource = reader.ReadString();
+                string songTags = reader.ReadString();
+
+                int onlineOffset = reader.ReadInt16();
+
+                string font = reader.ReadString();
+
+                bool unplayed = reader.ReadBoolean();
+
+                long lastPlay = reader.ReadInt64();
+
+                bool isOsz2 = reader.ReadBoolean();
+
+                string songFolderName = reader.ReadString();
+
+                long lastTimeCheck = reader.ReadInt64();
+
+                bool isIgnoreBeatmapSound = reader.ReadBoolean();
+                bool IsIgnoreBeatmapSkin = reader.ReadBoolean();
+                bool isStoryboardDisabled = reader.ReadBoolean();
+                bool isVideoDisabled = reader.ReadBoolean();
+                bool isVisualOverrided = reader.ReadBoolean();
 
                 if (old)
                 {
-                    int num19 = reader.ReadInt16();
+                    int unknown = reader.ReadInt16();
                 }
 
-                reader.ReadInt32();
-                int num20 = reader.ReadByte();
-                string rankedNameUnicode = str3;
-                string artist = str1;
-                string artistUnicode = str2;
-                List<string> tags = new List<string>(str7.Split(' '));
-                string creator = str4;
-                string diffcultyName = str5;
-                string audioFileName = str6;
-                int id = num9;
-                int setId = num10;
+                int unknown2 = reader.ReadInt32();
 
-                return new OsuBeatmap(rankedName, rankedNameUnicode, artist, artistUnicode, tags, creator, diffcultyName, audioFileName, id, setId);
+                int maniaScrollSpeed = reader.ReadByte();
+
+                List<string> tags = new List<string>(songTags.Split(' '));
+
+                return new OsuBeatmap(rankedName, rankedNameUnicode, artistName, artistNameUnicode, tags, creatorName, diffcultyName, songFolderName, osuFileName, audioFileName, beatmapId, beatmapSetId, md5Hash);
             }
         }
     }

@@ -17,6 +17,7 @@ namespace OsuUtil.DataBase
         public string PlayerName { get; }
 
         public Dictionary<int, IBeatmapSet> BeatmapSets { get; }
+        private Dictionary<string, IBeatmap> BeatmapHashMap { get; }
 
         public int BeatmapCount
         {
@@ -30,11 +31,31 @@ namespace OsuUtil.DataBase
         {
             BeatmapSets = beatmapSets;
             Version = version;
+
+            BeatmapHashMap = new Dictionary<string, IBeatmap>();
+
+            foreach (IBeatmapSet mapSet in beatmapSets.Values)
+            {
+                foreach (IBeatmap map in mapSet.Beatmaps.Values)
+                {
+                    BeatmapHashMap.Add(map.Hash, map);
+                }
+            }
         }
 
         public bool HasBeatmapSet(int id)
         {
             return BeatmapSets.ContainsKey(id);
+        }
+
+        public bool HasBeatmapHash(string hash)
+        {
+            return BeatmapHashMap.ContainsKey(hash);
+        }
+
+        public IBeatmap GetBeatmapByHash(string hash)
+        {
+            return BeatmapHashMap[hash];
         }
     }
 }

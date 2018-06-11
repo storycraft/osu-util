@@ -46,6 +46,9 @@
     <Compile Include="Beatmap\OsuBeatmap.cs" />
     <Compile Include="Beatmap\OsuBeatmapSet.cs" />
     <Compile Include="DataBase\BeatmapDb.cs" />
+    <Compile Include="DataBase\CollectionDb.cs" />
+    <Compile Include="DataBase\OsuCollectionDb.cs" />
+    <Compile Include="DataBase\OsuCollectionReader.cs" />
     <Compile Include="DataBase\OsuDb.cs" />
     <Compile Include="DataBase\OsuDbReader.cs" />
     <Compile Include="DataBase\OsuDbWriter.cs" />

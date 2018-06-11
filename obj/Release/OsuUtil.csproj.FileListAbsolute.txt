@@ -3,3 +3,4 @@ C:\Users\user\Desktop\Story Workspace\OsuUtil\bin\Release\OsuUtil.pdb
 C:\Users\user\Desktop\Story Workspace\OsuUtil\obj\Release\OsuUtil.csproj.CoreCompileInputs.cache
 C:\Users\user\Desktop\Story Workspace\OsuUtil\obj\Release\OsuUtil.dll
 C:\Users\user\Desktop\Story Workspace\OsuUtil\obj\Release\OsuUtil.pdb
+C:\Users\user\Desktop\Story Workspace\OsuUtil\obj\Release\OsuUtil.csprojResolveAssemblyReference.cache

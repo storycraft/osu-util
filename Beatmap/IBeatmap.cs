@@ -22,6 +22,12 @@ namespace OsuUtil.Beatmap
 
         string DiffcultyName { get; }
 
+        string SongFolderName { get; }
+
+        string OsuFileName { get; }
+
         string AudioFileName { get; }
+
+        string Hash { get; }
     }
 }

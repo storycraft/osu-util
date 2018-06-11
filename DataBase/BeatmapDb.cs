@@ -7,6 +7,9 @@ namespace OsuUtil.DataBase
     {
         Dictionary<int, IBeatmapSet> BeatmapSets { get; }
 
+        bool HasBeatmapHash(string hash);
+        IBeatmap GetBeatmapByHash(string hash);
+
         bool HasBeatmapSet(int id);
     }
 }
