@@ -2,7 +2,7 @@ using System.Runtime.InteropServices;
 
 namespace OsuUtil.IO.Struct
 {
-    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 1)]
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct BeatmapTimeInfo
     {
         [MarshalAs(UnmanagedType.I4)]

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OsuUtil.IO.Struct
 {
-    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 1)]
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct BeatmapPlayInfoStruct
     {
         [MarshalAs(UnmanagedType.R4)]

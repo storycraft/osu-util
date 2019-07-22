@@ -73,11 +73,11 @@ namespace OsuUtil.IO
         {
             if (str != null)
             {
-                Write(11);
+                Write((byte) 11);
                 Write(str);
             }
             else
-                Write(0);
+                Write((byte) 0);
         }
 
         public void WriteDateTime(DateTime time)
@@ -91,9 +91,9 @@ namespace OsuUtil.IO
 
             foreach (int key in mods.Keys)
             {
-                Write(8);
+                Write((byte) 8);
                 Write(key);
-                Write(13);
+                Write((byte) 13);
                 Write(mods[key]);
             }
         }
@@ -107,13 +107,14 @@ namespace OsuUtil.IO
 
         public void WriteStruct<T>(T structure) where T : struct
         {
-            byte[] data = new byte[Marshal.SizeOf(structure)];
+            byte[] data = new byte[Marshal.SizeOf(typeof(T))];
 
-            GCHandle handle = GCHandle.Alloc(structure, GCHandleType.Pinned);
-            Marshal.Copy(data, 0, handle.AddrOfPinnedObject(), data.Length);
-            handle.Free();
+            IntPtr buff = Marshal.AllocHGlobal(data.Length);
+            Marshal.StructureToPtr(structure, buff, false);
+            Marshal.Copy(buff, data, 0, data.Length);
+            Marshal.FreeHGlobal(buff);
 
-            WriteBytes(data);
+            Write(data);
         }
     }
 }

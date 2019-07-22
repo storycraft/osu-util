@@ -62,5 +62,26 @@ namespace OsuUtil.Beatmap
         public BeatmapSettingStruct BeatmapSetting; 
 
         public string MapTag;
+
+        public OsuBeatmap()
+        {
+            RankedStatus = RankedStatus.UNKNOWN;
+            ElementCount = new BeatmapElementCountStruct();
+            BeatmapPlayInfo = new BeatmapPlayInfoStruct();
+
+            StarRatingOsu = new Dictionary<int, double>();
+            StarRatingTaiko = new Dictionary<int, double>();
+            StarRatingCTB = new Dictionary<int, double>();
+            StarRatingMania = new Dictionary<int, double>();
+
+            Timeinfo = new BeatmapTimeInfo();
+            TimingPointList = new List<TimingPointStruct>();
+            BeatmapInfo = new BeatmapInfoStruct();
+            BeatmapGrade = new BeatmapGradeStruct();
+            Playmode = new BeatmapPlaymodeStruct();
+
+            Misc = new BeatmapMiscStruct();
+            BeatmapSetting = new BeatmapSettingStruct();
+        }
     }
 }

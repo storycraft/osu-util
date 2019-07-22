@@ -28,6 +28,8 @@ namespace OsuUtil.DataBase
                         BeatmapParser.WriteToWriter(writer, beatmap);
                     }
                 }
+
+                writer.Write(4);
             }
 
             return true;
@@ -38,65 +40,71 @@ namespace OsuUtil.DataBase
 
     public static class BeatmapParser
     {
-        public static void WriteToWriter(OsuBinaryWriter osuWriter, OsuBeatmap beatmap)
+        public static void WriteToWriter(OsuBinaryWriter writer, OsuBeatmap beatmap)
         {
-            MemoryStream writtenData = new MemoryStream();
-            using (OsuBinaryWriter writer = new OsuBinaryWriter(writtenData))
-            {
-                writer.WriteString(beatmap.ArtistName);
-                writer.WriteString(beatmap.ArtistNameUnicode);
+            long sizePosition = writer.Position;
 
-                writer.WriteString(beatmap.RankedName);
-                writer.WriteString(beatmap.RankedNameUnicode);
+            writer.Position += 4;
 
-                writer.WriteString(beatmap.CreatorName);
+            writer.WriteString(beatmap.ArtistName);
+            writer.WriteString(beatmap.ArtistNameUnicode);
 
-                writer.WriteString(beatmap.DiffcultyName);
+            writer.WriteString(beatmap.RankedName);
+            writer.WriteString(beatmap.RankedNameUnicode);
 
-                writer.WriteString(beatmap.AudioFileName);
+            writer.WriteString(beatmap.CreatorName);
 
-                writer.WriteString(beatmap.MD5Hash);
-                writer.WriteString(beatmap.OsuFileName);
+            writer.WriteString(beatmap.DiffcultyName);
 
-                writer.Write((byte)beatmap.RankedStatus);
+            writer.WriteString(beatmap.AudioFileName);
 
-                writer.WriteStruct<BeatmapElementCountStruct>(beatmap.ElementCount);
+            writer.WriteString(beatmap.MD5Hash);
+            writer.WriteString(beatmap.OsuFileName);
 
-                writer.Write(beatmap.LastModification);
+            writer.Write((byte)beatmap.RankedStatus);
 
-                writer.WriteStruct<BeatmapPlayInfoStruct>(beatmap.BeatmapPlayInfo);
+            writer.WriteStruct<BeatmapElementCountStruct>(beatmap.ElementCount);
 
-                writer.WriteIntDoublePair(beatmap.StarRatingOsu);
-                writer.WriteIntDoublePair(beatmap.StarRatingTaiko);
-                writer.WriteIntDoublePair(beatmap.StarRatingCTB);
-                writer.WriteIntDoublePair(beatmap.StarRatingMania);
+            writer.Write(beatmap.LastModification);
 
-                writer.WriteStruct<BeatmapTimeInfo>(beatmap.Timeinfo);
+            writer.WriteStruct<BeatmapPlayInfoStruct>(beatmap.BeatmapPlayInfo);
 
-                writer.WriteTimingPointList(beatmap.TimingPointList);
+            writer.WriteIntDoublePair(beatmap.StarRatingOsu);
+            writer.WriteIntDoublePair(beatmap.StarRatingTaiko);
+            writer.WriteIntDoublePair(beatmap.StarRatingCTB);
+            writer.WriteIntDoublePair(beatmap.StarRatingMania);
 
-                writer.WriteStruct<BeatmapGradeStruct>(beatmap.BeatmapGrade);
+            writer.WriteStruct<BeatmapTimeInfo>(beatmap.Timeinfo);
 
-                writer.WriteStruct<BeatmapPlaymodeStruct>(beatmap.Playmode);
+            writer.WriteTimingPointList(beatmap.TimingPointList);
 
-                writer.WriteString(beatmap.SongSource);
-                writer.WriteString(beatmap.SongTags);
+            writer.WriteStruct<BeatmapInfoStruct>(beatmap.BeatmapInfo);
+            writer.WriteStruct<BeatmapGradeStruct>(beatmap.BeatmapGrade);
 
-                writer.Write(beatmap.OnlineOffset);
+            writer.WriteStruct<BeatmapPlaymodeStruct>(beatmap.Playmode);
 
-                writer.WriteString(beatmap.Font);
+            writer.WriteString(beatmap.SongSource);
+            writer.WriteString(beatmap.SongTags);
 
-                writer.WriteStruct<BeatmapMiscStruct>(beatmap.Misc);
+            writer.Write(beatmap.OnlineOffset);
 
-                writer.WriteString(beatmap.SongFolderName);
+            writer.WriteString(beatmap.Font);
 
-                writer.Write(beatmap.LastTimeCheck);
+            writer.WriteStruct<BeatmapMiscStruct>(beatmap.Misc);
 
-                writer.WriteStruct<BeatmapSettingStruct>(beatmap.BeatmapSetting);
-            }
+            writer.WriteString(beatmap.SongFolderName);
 
-            osuWriter.Write(writtenData.Length);
-            osuWriter.Write(writtenData.ToArray());
+            writer.Write(beatmap.LastTimeCheck);
+
+            writer.WriteStruct<BeatmapSettingStruct>(beatmap.BeatmapSetting);
+
+            int size = (int) (writer.Position - sizePosition - 4);
+
+            long lastPosition = writer.Position;
+
+            writer.Position = sizePosition;
+            writer.Write(size);
+            writer.Position = lastPosition;
         }
     }
 }

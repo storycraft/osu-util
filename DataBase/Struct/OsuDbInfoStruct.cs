@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OsuUtil.DataBase.Struct
 {
-    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 1)]
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct OsuDbInfoStruct
     {
         [MarshalAs(UnmanagedType.I4)]
