@@ -1,157 +1,123 @@
 ﻿using OsuUtil.Beatmap;
+using OsuUtil.DataBase.Struct;
 using OsuUtil.Exceptions.Local;
 using OsuUtil.IO;
+using OsuUtil.IO.Struct;
+using OsuUtil.Status;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
 namespace OsuUtil.DataBase
 {
-    public static class OsuDbReader
+    public class OsuDbReader
     {
-        public static OsuDb ParseFromStream(FileStream dbStream)
+        public OsuDb ParseFromStream(Stream dbStream)
         {
             using (OsuBinaryReader reader = new OsuBinaryReader(dbStream))
             {
-                Dictionary<int, IBeatmapSet> beatmapSets = new Dictionary<int, IBeatmapSet>();
-                int version = reader.ReadInt32();
-                bool old = version < 20140609;
-                int folderCount = reader.ReadInt32();
-                bool AccountLocked = reader.ReadBoolean();
-                DateTime AccountUnlock = reader.ReadDateTime();
-                string PlayerName = reader.ReadString();
-                int num1 = reader.ReadInt32();
-                for (int index = 0; index < num1; ++index)
+                OsuDb db = new OsuDb();
+
+                Dictionary<int, OsuBeatmapSet> beatmapSets = new Dictionary<int, OsuBeatmapSet>();
+                db.Info = reader.ReadStruct<OsuDbInfoStruct>();
+
+                bool old = db.Info.Version < 20140609;
+
+                db.PlayerName = reader.ReadString();
+                int mapSize = reader.ReadInt32();
+
+                if (old)
+                    throw new DbParseException("old osu.db file is not supported. Please update!");
+
+                for (int index = 0; index < mapSize; ++index)
                 {
-                    IBeatmap fromReader = BeatmapParser.ParseFromReader(reader, old);
-                    IBeatmapSet beatmapSet;
-                    if (beatmapSets.ContainsKey(fromReader.SetId))
+                    OsuBeatmap fromReader = BeatmapParser.ParseFromReader(reader);
+                    OsuBeatmapSet beatmapSet;
+                    if (beatmapSets.ContainsKey(fromReader.BeatmapInfo.BeatmapSetId))
                     {
-                        beatmapSet = beatmapSets[fromReader.SetId];
+                        beatmapSet = beatmapSets[fromReader.BeatmapInfo.BeatmapSetId];
                     }
                     else
                     {
-                        beatmapSet = new OsuBeatmapSet(fromReader.RankedName, fromReader.RankedNameUnicode, fromReader.Artist, fromReader.ArtistUnicode, fromReader.Tags, fromReader.SetId, "binary");
+                        beatmapSet = new OsuBeatmapSet(fromReader.RankedName, fromReader.RankedNameUnicode, fromReader.ArtistName, fromReader.ArtistNameUnicode, fromReader.BeatmapInfo.BeatmapSetId, "binary");
                         beatmapSets[beatmapSet.RankedID] = beatmapSet;
                     }
-                    beatmapSet.Beatmaps[fromReader.Id] = fromReader;
+
+                    beatmapSet.Beatmaps[fromReader.BeatmapInfo.BeatmapId] = fromReader;
                 }
                 int num2 = reader.ReadByte();
-                return new OsuDb(version, folderCount, AccountLocked, AccountUnlock, PlayerName, beatmapSets);
+
+                return db;
             }
         }
 
-        private static class BeatmapParser
+        public static class BeatmapParser
         {
-            public static IBeatmap ParseFromReader(OsuBinaryReader reader, bool old)
+            public static OsuBeatmap ParseFromReader(OsuBinaryReader reader)
             {
                 int size = reader.ReadInt32();
-                string artistName = reader.ReadString();
-                string artistNameUnicode = reader.ReadString();
 
-                string rankedName = reader.ReadString();
-                string rankedNameUnicode = reader.ReadString();
+                OsuBeatmap beatmap = new OsuBeatmap();
 
-                string creatorName = reader.ReadString();
+                beatmap.ArtistName = reader.ReadString();
+                beatmap.ArtistNameUnicode = reader.ReadString();
 
-                string diffcultyName = reader.ReadString();
+                beatmap.RankedName = reader.ReadString();
+                beatmap.RankedNameUnicode = reader.ReadString();
 
-                string audioFileName = reader.ReadString();
+                beatmap.CreatorName = reader.ReadString();
 
-                string md5Hash = reader.ReadString();
-                string osuFileName = reader.ReadString();
+                beatmap.DiffcultyName = reader.ReadString();
 
-                int rankedStatus = reader.ReadByte();
+                beatmap.AudioFileName = reader.ReadString();
 
-                int hitcircleCount = reader.ReadInt16();
-                int sliderCount = reader.ReadInt16();
-                int spinnerCount = reader.ReadInt16();
+                beatmap.MD5Hash = reader.ReadString();
+                beatmap.OsuFileName = reader.ReadString();
 
-                long lastModification = reader.ReadInt64();
+                byte rawRankedStatus = reader.ReadByte();
 
-                double approachRate, circieSize, hpDrain, overallDiffculty;
-                if (old)
+                if (rawRankedStatus > 5)
                 {
-                    approachRate = reader.ReadByte();
-                    circieSize = reader.ReadByte();
-                    hpDrain = reader.ReadByte();
-                    overallDiffculty = reader.ReadByte();
-                }
-                else
-                {
-                    approachRate = reader.ReadSingle();
-                    circieSize = reader.ReadSingle();
-                    hpDrain = reader.ReadSingle();
-                    overallDiffculty = reader.ReadSingle();
+                    throw new DbParseException("Ranked status should be smaller than 6. Error while parsing " + beatmap.RankedNameUnicode);
                 }
 
-                double sliderVelocity = reader.ReadDouble();
+                beatmap.RankedStatus = (RankedStatus)rawRankedStatus;
 
-                Dictionary<int, double> starRatingOsu, starRatingTaiko, starRatingCTB, starRatingMania;
-                if (!old)
-                {
-                    starRatingOsu = reader.ReadIntDoublePair();
-                    starRatingTaiko = reader.ReadIntDoublePair();
-                    starRatingCTB = reader.ReadIntDoublePair();
-                    starRatingMania = reader.ReadIntDoublePair();
-                }
+                beatmap.ElementCount = reader.ReadStruct<BeatmapElementCountStruct>();
 
-                int drainTime = reader.ReadInt32();
-                int totalTime = reader.ReadInt32();
-                int previewStart = reader.ReadInt32();
+                beatmap.LastModification = reader.ReadInt64();
 
-                List<TimingPoint> timingPointList = reader.ReadTimingPointList();
+                beatmap.BeatmapPlayInfo = reader.ReadStruct<BeatmapPlayInfoStruct>();
 
-                int beatmapId = reader.ReadInt32();
-                int beatmapSetId = reader.ReadInt32();
-                int threadId = reader.ReadInt32();
+                beatmap.StarRatingOsu = reader.ReadIntDoublePair();
+                beatmap.StarRatingTaiko = reader.ReadIntDoublePair();
+                beatmap.StarRatingCTB = reader.ReadIntDoublePair();
+                beatmap.StarRatingMania = reader.ReadIntDoublePair();
 
-                int gradeOsu = reader.ReadByte();
-                int gradeTaiko = reader.ReadByte();
-                int gradeCTB = reader.ReadByte();
-                int gradeMania = reader.ReadByte();
+                beatmap.Timeinfo = reader.ReadStruct<BeatmapTimeInfo>();
 
-                int localOffset = reader.ReadInt16();
+                beatmap.TimingPointList = reader.ReadTimingPointList();
 
-                double stackLeniency = reader.ReadSingle();
+                beatmap.BeatmapGrade = reader.ReadStruct<BeatmapGradeStruct>();
 
-                byte gameplayMode = reader.ReadByte();
+                beatmap.Playmode = reader.ReadStruct<BeatmapPlaymodeStruct>();
 
-                string songSource = reader.ReadString();
-                string songTags = reader.ReadString();
+                beatmap.SongSource = reader.ReadString();
+                beatmap.SongTags = reader.ReadString();
 
-                int onlineOffset = reader.ReadInt16();
+                beatmap.OnlineOffset = reader.ReadInt16();
 
-                string font = reader.ReadString();
+                beatmap.Font = reader.ReadString();
 
-                bool unplayed = reader.ReadBoolean();
+                beatmap.Misc = reader.ReadStruct<BeatmapMiscStruct>();
 
-                long lastPlay = reader.ReadInt64();
+                beatmap.SongFolderName = reader.ReadString();
 
-                bool isOsz2 = reader.ReadBoolean();
+                beatmap.LastTimeCheck = reader.ReadInt64();
 
-                string songFolderName = reader.ReadString();
+                beatmap.BeatmapSetting = reader.ReadStruct<BeatmapSettingStruct>();
 
-                long lastTimeCheck = reader.ReadInt64();
-
-                bool isIgnoreBeatmapSound = reader.ReadBoolean();
-                bool IsIgnoreBeatmapSkin = reader.ReadBoolean();
-                bool isStoryboardDisabled = reader.ReadBoolean();
-                bool isVideoDisabled = reader.ReadBoolean();
-                bool isVisualOverrided = reader.ReadBoolean();
-
-                if (old)
-                {
-                    int unknown = reader.ReadInt16();
-                }
-
-                int unknown2 = reader.ReadInt32();
-
-                int maniaScrollSpeed = reader.ReadByte();
-
-                List<string> tags = new List<string>(songTags.Split(' '));
-
-                return new OsuBeatmap(rankedName, rankedNameUnicode, artistName, artistNameUnicode, tags, creatorName, diffcultyName, songFolderName, osuFileName, audioFileName, beatmapId, beatmapSetId, md5Hash);
+                return beatmap;
             }
         }
     }

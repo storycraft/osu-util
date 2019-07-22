@@ -1,6 +1,8 @@
-﻿using System;
+﻿using OsuUtil.IO.Struct;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace OsuUtil.IO
@@ -96,11 +98,22 @@ namespace OsuUtil.IO
             }
         }
 
-        public void WriteTimingPointList(List<TimingPoint> list)
+        public void WriteTimingPointList(List<TimingPointStruct> list)
         {
             Write(list.Count);
-            foreach (TimingPoint timingPoint in list)
-                timingPoint.WriteToWriter(this);
+            foreach (TimingPointStruct timingPoint in list)
+                WriteStruct(timingPoint);
+        }
+
+        public void WriteStruct<T>(T structure) where T : struct
+        {
+            byte[] data = new byte[Marshal.SizeOf(structure)];
+
+            GCHandle handle = GCHandle.Alloc(structure, GCHandleType.Pinned);
+            Marshal.Copy(data, 0, handle.AddrOfPinnedObject(), data.Length);
+            handle.Free();
+
+            WriteBytes(data);
         }
     }
 }

@@ -1,45 +1,30 @@
 ﻿using OsuUtil.Beatmap;
+using OsuUtil.DataBase.Struct;
 using System;
 using System.Collections.Generic;
 
 namespace OsuUtil.DataBase
 {
-    public class OsuDb : BeatmapDb
+    public class OsuDb
     {
-        public int Version { get; }
+        public OsuDbInfoStruct Info;
 
-        public int FolderCount { get; }
+        public string PlayerName;
 
-        public bool AccountLocked { get; }
-
-        public DateTime AccountUnlock { get; }
-
-        public string PlayerName { get; }
-
-        public Dictionary<int, IBeatmapSet> BeatmapSets { get; }
-        private Dictionary<string, IBeatmap> BeatmapHashMap { get; }
+        public Dictionary<int, OsuBeatmapSet> BeatmapSets { get; }
 
         public int BeatmapCount
         {
             get
             {
-                return BeatmapSets.Count;
-            }
-        }
+                int all = 0;
 
-        public OsuDb(int version, int folderCount, bool AccountLocked, DateTime AccountUnlock, string PlayerName, Dictionary<int, IBeatmapSet> beatmapSets)
-        {
-            BeatmapSets = beatmapSets;
-            Version = version;
-
-            BeatmapHashMap = new Dictionary<string, IBeatmap>();
-
-            foreach (IBeatmapSet mapSet in beatmapSets.Values)
-            {
-                foreach (IBeatmap map in mapSet.Beatmaps.Values)
+                foreach (OsuBeatmapSet set in BeatmapSets.Values)
                 {
-                    BeatmapHashMap.Add(map.Hash, map);
+                    all += set.Beatmaps.Count;
                 }
+
+                return all;
             }
         }
 
@@ -48,14 +33,33 @@ namespace OsuUtil.DataBase
             return BeatmapSets.ContainsKey(id);
         }
 
-        public bool HasBeatmapHash(string hash)
+        public List<OsuBeatmap> GetBeatmapList()
         {
-            return BeatmapHashMap.ContainsKey(hash);
+            List<OsuBeatmap> list = new List<OsuBeatmap>(BeatmapCount);
+
+            foreach (OsuBeatmapSet set in BeatmapSets.Values)
+            {
+                list.AddRange(set.Beatmaps.Values);
+            }
+
+            return list;
         }
 
-        public IBeatmap GetBeatmapByHash(string hash)
+        public OsuBeatmap GetBeatmapByHash(string hash)
         {
-            return BeatmapHashMap[hash];
+            if (hash == null || "".Equals(hash))
+                return null;
+
+            foreach (OsuBeatmapSet mapSet in BeatmapSets.Values)
+            {
+                foreach (OsuBeatmap map in mapSet.Beatmaps.Values)
+                {
+                    if (hash.Equals(map.MD5Hash))
+                        return map;
+                }
+            }
+
+            return null;
         }
     }
 }

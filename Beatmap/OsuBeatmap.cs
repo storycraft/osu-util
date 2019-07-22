@@ -1,50 +1,66 @@
-﻿using System.Collections.Generic;
+﻿using OsuUtil.IO.Struct;
+using OsuUtil.Status;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace OsuUtil.Beatmap
 {
-    public class OsuBeatmap : IBeatmap
+    public class OsuBeatmap
     {
-        public string RankedName { get; }
+        public string ArtistName;
+        public string ArtistNameUnicode;
 
-        public string RankedNameUnicode { get; }
+        public string RankedName;
+        public string RankedNameUnicode;
 
-        public string Artist { get; }
+        public string CreatorName;
 
-        public string ArtistUnicode { get; }
+        public string DiffcultyName;
 
-        public List<string> Tags { get; }
+        public string AudioFileName;
 
-        public int Id { get; }
+        public string MD5Hash;
+        public string OsuFileName;
 
-        public int SetId { get; }
+        public RankedStatus RankedStatus;
 
-        public string DiffcultyName { get; }
+        public BeatmapElementCountStruct ElementCount;
 
-        public string SongFolderName { get; }
+        public long LastModification;
 
-        public string OsuFileName { get; }
+        public BeatmapPlayInfoStruct BeatmapPlayInfo;
 
-        public string AudioFileName { get; }
+        public Dictionary<int, double> StarRatingOsu, StarRatingTaiko, StarRatingCTB, StarRatingMania;
 
-        public string Creator { get; }
+        public BeatmapTimeInfo Timeinfo;
 
-        public string Hash { get; }
+        public List<TimingPointStruct> TimingPointList;
 
-        public OsuBeatmap(string rankedName, string rankedNameUnicode, string artist, string artistUnicode, List<string> tags, string creator, string diffcultyName, string songFolderName, string osuFileName, string audioFileName, int id, int setId, string hash)
-        {
-            RankedName = rankedName;
-            RankedNameUnicode = rankedNameUnicode;
-            Artist = artist;
-            ArtistUnicode = artistUnicode;
-            Tags = tags;
-            Creator = creator;
-            DiffcultyName = diffcultyName;
-            SongFolderName = songFolderName;
-            OsuFileName = osuFileName;
-            AudioFileName = audioFileName;
-            Id = id;
-            SetId = id;
-            Hash = hash;
-        }
+        public BeatmapInfoStruct BeatmapInfo;
+
+        public BeatmapGradeStruct BeatmapGrade;
+
+        public BeatmapPlaymodeStruct Playmode;
+
+        public string SongSource;
+        public string SongTags;
+
+        public short OnlineOffset;
+
+        public string Font;
+
+        public BeatmapMiscStruct Misc;
+
+        public string SongFolderName;
+
+        public long LastTimeCheck;
+
+        public BeatmapSettingStruct BeatmapSetting; 
+
+        public string MapTag;
     }
 }

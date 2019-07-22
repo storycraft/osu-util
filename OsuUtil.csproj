@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>OsuUtil</RootNamespace>
     <AssemblyName>OsuUtil</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -40,26 +41,33 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Beatmap\BeatmapSetFile.cs" />
-    <Compile Include="Beatmap\IBeatmap.cs" />
-    <Compile Include="Beatmap\IBeatmapSet.cs" />
-    <Compile Include="Beatmap\OsuBeatmap.cs" />
     <Compile Include="Beatmap\OsuBeatmapSet.cs" />
-    <Compile Include="DataBase\BeatmapDb.cs" />
-    <Compile Include="DataBase\CollectionDb.cs" />
+    <Compile Include="Collection\OsuCollection.cs" />
     <Compile Include="DataBase\OsuCollectionDb.cs" />
     <Compile Include="DataBase\OsuCollectionReader.cs" />
+    <Compile Include="DataBase\OsuCollectionWriter.cs" />
     <Compile Include="DataBase\OsuDb.cs" />
     <Compile Include="DataBase\OsuDbReader.cs" />
     <Compile Include="DataBase\OsuDbWriter.cs" />
+    <Compile Include="DataBase\Struct\OsuDbInfoStruct.cs" />
     <Compile Include="Exceptions\Local\BeatmapParseException.cs" />
     <Compile Include="Exceptions\Local\DbParseException.cs" />
     <Compile Include="Exceptions\Local\UnSupportedBeatmapSetType.cs" />
     <Compile Include="IO\OsuBinaryReader.cs" />
     <Compile Include="IO\OsuBinaryWriter.cs" />
-    <Compile Include="IO\TimingPoint.cs" />
+    <Compile Include="IO\Struct\BeatmapElementCountStruct.cs" />
+    <Compile Include="IO\Struct\BeatmapInfoStruct.cs" />
+    <Compile Include="IO\Struct\BeatmapPlaymodeStruct.cs" />
+    <Compile Include="IO\Struct\BeatmapMiscStruct.cs" />
+    <Compile Include="IO\Struct\BeatmapGradeStruct.cs" />
+    <Compile Include="IO\Struct\BeatmapSettingStruct.cs" />
+    <Compile Include="IO\Struct\BeatmapPlayInfoStruct.cs" />
+    <Compile Include="Beatmap\OsuBeatmap.cs" />
+    <Compile Include="IO\Struct\BeatmapTimeInfoStruct.cs" />
+    <Compile Include="IO\Struct\TimingPointStruct.cs" />
     <Compile Include="OsuFinder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Status\RankedStatus.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -2,7 +2,7 @@
 
 namespace OsuUtil.Beatmap
 {
-    public class OsuBeatmapSet : IBeatmapSet
+    public class OsuBeatmapSet
     {
         public string RankedName { get; }
 
@@ -12,17 +12,15 @@ namespace OsuUtil.Beatmap
 
         public string ArtistUnicode { get; }
 
-        public List<string> Tags { get; }
-
         public string PackageType { get; }
 
         public int RankedID { get; }
 
-        public Dictionary<int, IBeatmap> Beatmaps { get; }
+        public Dictionary<int, OsuBeatmap> Beatmaps { get; }
 
-        public OsuBeatmapSet(string rankedName, string rankedNameUnicode, string artist, string artistUnicode, List<string> tags, int rankedId, string packageType)
+        public OsuBeatmapSet(string rankedName, string rankedNameUnicode, string artist, string artistUnicod, int rankedId, string packageType)
         {
-            Beatmaps = new Dictionary<int, IBeatmap>();
+            Beatmaps = new Dictionary<int, OsuBeatmap>();
             RankedName = rankedName;
             RankedID = rankedId;
             PackageType = packageType;
@@ -30,7 +28,10 @@ namespace OsuUtil.Beatmap
 
         public override bool Equals(object obj)
         {
-            return RankedID == ((IBeatmapSet)obj).RankedID;
+            if (obj == null)
+                return false;
+
+            return RankedID == ((OsuBeatmapSet)obj).RankedID;
         }
     }
 }

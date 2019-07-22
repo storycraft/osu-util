@@ -1,4 +1,5 @@
-﻿using OsuUtil.IO;
+﻿using OsuUtil.Collection;
+using OsuUtil.IO;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,18 +11,24 @@ namespace OsuUtil.DataBase
 {
     public class OsuCollectionReader
     {
-        public static OsuCollectionDb ParseFromStream(FileStream dbStream)
+        public OsuCollectionDb ParseFromStream(Stream dbStream)
         {
-            Dictionary<string, List<string>> collectionSet = new Dictionary<string, List<string>>();
+            OsuCollectionDb db = new OsuCollectionDb();
 
             using (OsuBinaryReader reader = new OsuBinaryReader(dbStream))
             {
-                int version = reader.ReadInt32();
+                List<OsuCollection> collectionSet = new List<OsuCollection>();
+
+                db.Version = reader.ReadInt32();
+                db.CollectionList = collectionSet;
                 int collectionCount = reader.ReadInt32();
 
                 for (int i = 0; i < collectionCount; i++)
                 {
-                    String name = reader.ReadString();
+                    OsuCollection collection = new OsuCollection();
+                    collection.BeatmapHashList = new List<string>();
+
+                    collection.Name = reader.ReadString();
 
                     List<string> beatmapHashList = new List<string>(); 
 
@@ -30,14 +37,14 @@ namespace OsuUtil.DataBase
                     for (int j = 0; j < count; j++)
                     {
                         String hash = reader.ReadString();
-                        beatmapHashList.Add(hash);
+                        collection.BeatmapHashList.Add(hash);
                     }
 
-                    collectionSet.Add(name, beatmapHashList);
+                    collectionSet.Add(collection);
                 }
             }
 
-            return new OsuCollectionDb(collectionSet);
+            return db;
         }
     }
 }
