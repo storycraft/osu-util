@@ -19,6 +19,7 @@ namespace OsuUtil.DataBase
                 OsuDb db = new OsuDb();
 
                 Dictionary<int, OsuBeatmapSet> beatmapSets = new Dictionary<int, OsuBeatmapSet>();
+                db.BeatmapSets = beatmapSets;
                 db.Info = reader.ReadStruct<OsuDbInfoStruct>();
 
                 bool old = db.Info.Version < 20140609;
@@ -32,6 +33,8 @@ namespace OsuUtil.DataBase
                 for (int index = 0; index < mapSize; ++index)
                 {
                     OsuBeatmap fromReader = BeatmapParser.ParseFromReader(reader);
+                    Console.Out.WriteLine(fromReader.RankedName);
+                    
                     OsuBeatmapSet beatmapSet;
                     if (beatmapSets.ContainsKey(fromReader.BeatmapInfo.BeatmapSetId))
                     {
@@ -76,9 +79,9 @@ namespace OsuUtil.DataBase
 
                 byte rawRankedStatus = reader.ReadByte();
 
-                if (rawRankedStatus > 5)
+                if (rawRankedStatus > 8)
                 {
-                    throw new DbParseException("Ranked status should be smaller than 6. Error while parsing " + beatmap.RankedNameUnicode);
+                    throw new DbParseException("Ranked status should be smaller than 8. Error while parsing " + beatmap.RankedNameUnicode);
                 }
 
                 beatmap.RankedStatus = (RankedStatus)rawRankedStatus;
@@ -98,11 +101,14 @@ namespace OsuUtil.DataBase
 
                 beatmap.TimingPointList = reader.ReadTimingPointList();
 
+                beatmap.BeatmapInfo = reader.ReadStruct<BeatmapInfoStruct>();
+
                 beatmap.BeatmapGrade = reader.ReadStruct<BeatmapGradeStruct>();
 
                 beatmap.Playmode = reader.ReadStruct<BeatmapPlaymodeStruct>();
 
                 beatmap.SongSource = reader.ReadString();
+
                 beatmap.SongTags = reader.ReadString();
 
                 beatmap.OnlineOffset = reader.ReadInt16();

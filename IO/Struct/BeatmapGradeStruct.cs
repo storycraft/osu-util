@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace OsuUtil.IO.Struct
 {
-    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 1)]
     public struct BeatmapGradeStruct
     {
-        [MarshalAs(UnmanagedType.I4)]
-        public int GradeOsu;
-        [MarshalAs(UnmanagedType.I4)]
-        public int GradeTaiko;
-        [MarshalAs(UnmanagedType.I4)]
-        public int GradeCTB;
-        [MarshalAs(UnmanagedType.I4)]
-        public int GradeMania;
+        [MarshalAs(UnmanagedType.I1)]
+        public byte GradeOsu;
+        [MarshalAs(UnmanagedType.I1)]
+        public byte GradeTaiko;
+        [MarshalAs(UnmanagedType.I1)]
+        public byte GradeCTB;
+        [MarshalAs(UnmanagedType.I1)]
+        public byte GradeMania;
     }
 }

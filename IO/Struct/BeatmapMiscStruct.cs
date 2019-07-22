@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace OsuUtil.IO.Struct
 {
-    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 1)]
     public struct BeatmapMiscStruct
     {
-        [MarshalAs(UnmanagedType.Bool)]
-        public bool Unplayed;
+        [MarshalAs(UnmanagedType.I1)]
+        public byte Unplayed;
 
         [MarshalAs(UnmanagedType.I8)]
         public long LastPlay;
 
-        [MarshalAs(UnmanagedType.Bool)]
-        public bool IsOsz2;
+        [MarshalAs(UnmanagedType.I1)]
+        public byte IsOsz2;
     }
 }

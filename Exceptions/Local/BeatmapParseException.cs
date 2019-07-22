@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 
 namespace OsuUtil.Exceptions.Local
 {
-    internal class BeatmapParseException : Exception
+    public class BeatmapParseException : Exception
     {
         public BeatmapParseException(string message)
           : base(message)

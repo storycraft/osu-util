@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OsuUtil.DataBase.Struct
 {
-    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 1)]
     public struct OsuDbInfoStruct
     {
         [MarshalAs(UnmanagedType.I4)]
@@ -16,8 +16,8 @@ namespace OsuUtil.DataBase.Struct
         [MarshalAs(UnmanagedType.I4)]
         public int FolderCount;
 
-        [MarshalAs(UnmanagedType.Bool)]
-        public bool AccountLocked;
+        [MarshalAs(UnmanagedType.I1)]
+        public byte AccountLocked;
 
         [MarshalAs(UnmanagedType.I8)]
         public long AccountUnlock;

@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace OsuUtil.IO.Struct
 {
-    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 1)]
     public struct BeatmapElementCountStruct
     {
-        [MarshalAs(UnmanagedType.I4)]
-        public int HitcircleCount;
-        [MarshalAs(UnmanagedType.I4)]
-        public int SliderCount;
-        [MarshalAs(UnmanagedType.I4)]
-        public int SpinnerCount;
+        [MarshalAs(UnmanagedType.I2)]
+        public short HitcircleCount;
+        [MarshalAs(UnmanagedType.I2)]
+        public short SliderCount;
+        [MarshalAs(UnmanagedType.I2)]
+        public short SpinnerCount;
     }
 }

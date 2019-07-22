@@ -7,24 +7,24 @@ using System.Threading.Tasks;
 
 namespace OsuUtil.IO.Struct
 {
-    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 1)]
     public struct BeatmapSettingStruct
     {
-        [MarshalAs(UnmanagedType.Bool)]
-        public bool IsIgnoreBeatmapSound;
-        [MarshalAs(UnmanagedType.Bool)]
-        public bool IsIgnoreBeatmapSkin;
-        [MarshalAs(UnmanagedType.Bool)]
-        public bool IsStoryboardDisabled;
-        [MarshalAs(UnmanagedType.Bool)]
-        public bool IsVideoDisabled;
-        [MarshalAs(UnmanagedType.Bool)]
-        public bool IsVisualOverrided;
+        [MarshalAs(UnmanagedType.I1)]
+        public byte IsIgnoreBeatmapSound;
+        [MarshalAs(UnmanagedType.I1)]
+        public byte IsIgnoreBeatmapSkin;
+        [MarshalAs(UnmanagedType.I1)]
+        public byte IsStoryboardDisabled;
+        [MarshalAs(UnmanagedType.I1)]
+        public byte IsVideoDisabled;
+        [MarshalAs(UnmanagedType.I1)]
+        public byte IsVisualOverrided;
 
         [MarshalAs(UnmanagedType.I4)]
-        public int Unknown2;
+        public int LastModification;
 
-        [MarshalAs(UnmanagedType.I4)]
-        public int ManiaScrollSpeed;
+        [MarshalAs(UnmanagedType.I1)]
+        public byte ManiaScrollSpeed;
     }
 }

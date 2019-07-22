@@ -79,7 +79,7 @@ namespace OsuUtil.IO
             switch (num)
             {
                 case 0:
-                    return null;
+                    return "";
                 case 11:
                     return base.ReadString();
                 default:

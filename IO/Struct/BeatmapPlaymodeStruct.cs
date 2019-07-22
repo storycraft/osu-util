@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace OsuUtil.IO.Struct
 {
-    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 1)]
     public struct BeatmapPlaymodeStruct
     {
-        [MarshalAs(UnmanagedType.I4)]
-        public int LocalOffset;
+        [MarshalAs(UnmanagedType.I2)]
+        public short LocalOffset;
 
-        [MarshalAs(UnmanagedType.R8)]
-        public double StackLeniency;
+        [MarshalAs(UnmanagedType.R4)]
+        public float StackLeniency;
 
         [MarshalAs(UnmanagedType.I1)]
         public byte GameplayMode;

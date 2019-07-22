@@ -2,7 +2,7 @@ using System.Runtime.InteropServices;
 
 namespace OsuUtil.IO.Struct
 {
-    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 1)]
     public struct TimingPointStruct
     {
         [MarshalAs(UnmanagedType.R8)]
@@ -11,7 +11,7 @@ namespace OsuUtil.IO.Struct
         [MarshalAs(UnmanagedType.R8)]
         public double MsPerQuarter;
 
-        [MarshalAs(UnmanagedType.Bool)]
-        public bool TimingChange;
+        [MarshalAs(UnmanagedType.I1)]
+        public byte TimingChange;
     }
 }

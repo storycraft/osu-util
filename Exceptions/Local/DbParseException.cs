@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 
 namespace OsuUtil.Exceptions.Local
 {
-    internal class DbParseException : Exception
+    public class DbParseException : Exception
     {
         public DbParseException(string message)
           : base(message)

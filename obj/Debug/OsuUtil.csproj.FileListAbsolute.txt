@@ -10,3 +10,9 @@ F:\Story Workspace\osu-util\obj\Debug\OsuUtil.csprojAssemblyReference.cache
 F:\Story Workspace\osu-util\obj\Debug\OsuUtil.csproj.CoreCompileInputs.cache
 F:\Story Workspace\osu-util\bin\Debug\OsuUtil.dll
 F:\Story Workspace\osu-util\bin\Debug\OsuUtil.pdb
+C:\Users\dbsxo\Desktop\Story Workspace\osu-util\bin\Debug\OsuUtil.dll
+C:\Users\dbsxo\Desktop\Story Workspace\osu-util\bin\Debug\OsuUtil.pdb
+C:\Users\dbsxo\Desktop\Story Workspace\osu-util\obj\Debug\OsuUtil.csproj.CoreCompileInputs.cache
+C:\Users\dbsxo\Desktop\Story Workspace\osu-util\obj\Debug\OsuUtil.dll
+C:\Users\dbsxo\Desktop\Story Workspace\osu-util\obj\Debug\OsuUtil.pdb
+C:\Users\dbsxo\Desktop\Story Workspace\osu-util\obj\Debug\OsuUtil.csprojAssemblyReference.cache

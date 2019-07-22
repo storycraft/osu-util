@@ -11,7 +11,7 @@ namespace OsuUtil.DataBase
 
         public string PlayerName;
 
-        public Dictionary<int, OsuBeatmapSet> BeatmapSets { get; }
+        public Dictionary<int, OsuBeatmapSet> BeatmapSets;
 
         public int BeatmapCount
         {
