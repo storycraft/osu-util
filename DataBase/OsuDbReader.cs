@@ -33,7 +33,6 @@ namespace OsuUtil.DataBase
                 for (int index = 0; index < mapSize; ++index)
                 {
                     OsuBeatmap fromReader = BeatmapParser.ParseFromReader(reader);
-                    Console.Out.WriteLine(fromReader.RankedName);
                     
                     OsuBeatmapSet beatmapSet;
                     if (beatmapSets.ContainsKey(fromReader.BeatmapInfo.BeatmapSetId))
