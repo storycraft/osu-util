@@ -10,5 +10,10 @@ namespace OsuUtil.Collection
     {
         public string Name;
         public List<string> BeatmapHashList;
+
+        public OsuCollection()
+        {
+            BeatmapHashList = new List<string>();
+        }
     }
 }
