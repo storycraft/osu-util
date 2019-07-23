@@ -45,7 +45,7 @@ namespace OsuUtil.DataBase
                         beatmapSets[beatmapSet.RankedID] = beatmapSet;
                     }
 
-                    beatmapSet.Beatmaps[fromReader.BeatmapInfo.BeatmapId] = fromReader;
+                    beatmapSet.Beatmaps.Add(fromReader);
                 }
                 int num2 = reader.ReadByte();
 

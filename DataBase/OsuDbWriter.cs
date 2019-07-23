@@ -23,7 +23,7 @@ namespace OsuUtil.DataBase
 
                 foreach (OsuBeatmapSet set in osuDb.BeatmapSets.Values)
                 {
-                    foreach (OsuBeatmap beatmap in set.Beatmaps.Values)
+                    foreach (OsuBeatmap beatmap in set.Beatmaps)
                     {
                         BeatmapParser.WriteToWriter(writer, beatmap);
                     }

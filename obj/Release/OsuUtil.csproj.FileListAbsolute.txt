@@ -9,3 +9,4 @@ C:\Users\dbsxo\Desktop\Story Workspace\osu-util\bin\Release\OsuUtil.pdb
 C:\Users\dbsxo\Desktop\Story Workspace\osu-util\obj\Release\OsuUtil.csproj.CoreCompileInputs.cache
 C:\Users\dbsxo\Desktop\Story Workspace\osu-util\obj\Release\OsuUtil.dll
 C:\Users\dbsxo\Desktop\Story Workspace\osu-util\obj\Release\OsuUtil.pdb
+C:\Users\dbsxo\Desktop\Story Workspace\osu-util\obj\Release\OsuUtil.csprojAssemblyReference.cache

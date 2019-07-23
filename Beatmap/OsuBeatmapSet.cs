@@ -16,11 +16,11 @@ namespace OsuUtil.Beatmap
 
         public int RankedID { get; }
 
-        public Dictionary<int, OsuBeatmap> Beatmaps { get; }
+        public List<OsuBeatmap> Beatmaps { get; }
 
         public OsuBeatmapSet(string rankedName, string rankedNameUnicode, string artist, string artistUnicod, int rankedId, string packageType)
         {
-            Beatmaps = new Dictionary<int, OsuBeatmap>();
+            Beatmaps = new List<OsuBeatmap>();
             RankedName = rankedName;
             RankedID = rankedId;
             PackageType = packageType;

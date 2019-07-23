@@ -39,7 +39,7 @@ namespace OsuUtil.DataBase
 
             foreach (OsuBeatmapSet set in BeatmapSets.Values)
             {
-                list.AddRange(set.Beatmaps.Values);
+                list.AddRange(set.Beatmaps);
             }
 
             return list;
@@ -52,7 +52,7 @@ namespace OsuUtil.DataBase
 
             foreach (OsuBeatmapSet mapSet in BeatmapSets.Values)
             {
-                foreach (OsuBeatmap map in mapSet.Beatmaps.Values)
+                foreach (OsuBeatmap map in mapSet.Beatmaps)
                 {
                     if (hash.Equals(map.MD5Hash))
                         return map;
